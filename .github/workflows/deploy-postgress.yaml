@@ -22,8 +22,8 @@ jobs:
 
       - name: Deploy manifests
         run: |
-          kubectl apply -f postgress/ -n ${{ github.event.inputs.namespace }}
+          kubectl apply -f postgress/
 
       - name: Verify deployment
         run: |
-          kubectl get pods -n ${{ github.event.inputs.namespace }}
+          kubectl get pods -n backstage

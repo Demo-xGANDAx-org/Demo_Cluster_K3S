@@ -1,0 +1,8 @@
+site_name: Mi Servicio
+
+nav:
+  - Home: index.md
+  - Ansible: ansible.md
+
+plugins:
+  - techdocs-core

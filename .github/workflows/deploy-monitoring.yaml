@@ -20,13 +20,13 @@ jobs:
           ADMIN_USER: ${{ secrets.ADMIN_USER }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
-          chmod +x postgress/secrets.sh
-          ./postgress/secrets.sh
+          chmod +x grafana/secrets.sh
+          ./grafana/secrets.sh
 
       - name: Deploy Components
         run: |
-          chmod +x postgress/deploy.sh
-          cd postgress
+          chmod +x grafana/deploy.sh
+          cd grafana
           ./deploy.sh
 
       - name: Verify deployment

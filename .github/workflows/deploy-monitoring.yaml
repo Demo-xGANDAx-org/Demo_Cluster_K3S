@@ -1,4 +1,4 @@
-name: Deploy Postgress on Kubernetes
+name: Deploy Grafana and Prometheus
 
 on:
   workflow_dispatch

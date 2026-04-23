@@ -1,0 +1,29 @@
+name: Deploy Postgress on Kubernetes
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy Secrets
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        run: |
+          chmod +x postgress/secrets.sh
+          ./postgress/secrets.sh
+
+      - name: Deploy manifests
+        run: |
+          kubectl apply -f postgress/ -n ${{ github.event.inputs.namespace }}
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n ${{ github.event.inputs.namespace }}

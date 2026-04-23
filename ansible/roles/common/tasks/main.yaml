@@ -23,6 +23,62 @@
   args:
     creates: /opt/ansible-venv
 
+- name: Install prerequisites
+  apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: yes
+
+- name: Create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Docker GPG key
+  get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+
+- name: Read Debian codename from os-release
+  shell: . /etc/os-release && echo "$VERSION_CODENAME"
+  register: deb_codename
+  changed_when: false
+
+- name: Get system architecture
+  command: dpkg --print-architecture
+  register: deb_arch
+  changed_when: false
+
+- name: Add Docker repository
+  copy:
+    dest: /etc/apt/sources.list.d/docker.sources
+    content: |
+      Types: deb
+      URIs: https://download.docker.com/linux/debian
+      Suites: {{ deb_codename.stdout }}
+      Components: stable
+      Architectures: {{ deb_arch.stdout }}
+      Signed-By: /etc/apt/keyrings/docker.asc
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Docker Engine and plugins
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: yes
+
 - name: Install kubernetes in venv
   pip:
     name: kubernetes

@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openclaw-config
+  labels:
+    app: openclaw
+data:
+  openclaw.json: |
+    {
+      "gateway": {
+        "mode": "local",
+        "bind": "lan",
+        "port": 18789,
+        "auth": {
+          "mode": "token"
+        },
+        "controlUi": {
+          "enabled": true,
+          "allowedOrigins": [
+            "*"
+          ]
+        }
+      },
+      "agents": {
+        "defaults": {
+          "workspace": "~/.openclaw/workspace",
+          "model": {
+            "primary": "openai/gpt-5.4-nano",
+          }
+        },
+        "list": [
+          {
+            "id": "default",
+            "name": "OpenClaw Assistant",
+            "workspace": "~/.openclaw/workspace"
+          }
+        ]
+      },
+      "cron": { "enabled": true },
+      "channels": {
+        "telegram": {
+          "enabled": true,
+          "botToken": "${TELEGRAM_BOT_TOKEN}",
+          "dmPolicy": "pairing",
+          "groups": { "*": { requireMention: true } }
+        }
+      }
+    }
+  AGENTS.md: |
+    # OpenClaw Assistant
+
+    You are a helpful AI assistant running in Kubernetes.

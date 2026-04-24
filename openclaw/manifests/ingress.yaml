@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openclaw-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  namespace: openclaw
+spec:
+  tls:
+  - hosts:
+    - openclaw.local
+    secretName: openclaw-tls
+
+  rules:
+  - host: openclaw.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: openclaw
+            port:
+              number: 18789

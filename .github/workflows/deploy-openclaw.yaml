@@ -1,0 +1,41 @@
+name: Deploy Open Claw
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy Components
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENCLAW_GATEWAY_TOKEN: ${{ secrets.OPENCLAW_GATEWAY_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+        run: |
+          chmod +x openclaw/deploy.sh
+          ./openclaw/deploy.sh --create-secret
+          ./openclaw/deploy.sh
+
+      - name: Deploy Certificate
+        env:
+          TLS_CERT: ${{ secrets.TLS_CERT }}
+          TLS_KEY: ${{ secrets.TLS_KEY }}
+        run: |
+          chmod +x openclaw/cert.sh
+          ./openclaw/cert.sh --create-secret
+
+      - name: Deploy Ingress
+        run: |
+          kubectl apply -f openclaw/manifests/ingress.yaml
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n backstage

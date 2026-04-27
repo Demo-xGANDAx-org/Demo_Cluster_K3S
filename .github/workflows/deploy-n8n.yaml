@@ -32,4 +32,4 @@ jobs:
 
       - name: Verify deployment
         run: |
-          kubectl get pods -n backstage
+          kubectl get pods -n n8n

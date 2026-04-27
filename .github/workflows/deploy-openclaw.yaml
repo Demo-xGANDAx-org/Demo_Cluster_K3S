@@ -30,7 +30,7 @@ jobs:
           TLS_KEY: ${{ secrets.TLS_KEY }}
         run: |
           chmod +x openclaw/cert.sh
-          ./openclaw/cert.sh --create-secret
+          ./openclaw/cert.sh
 
       - name: Deploy Ingress
         run: |

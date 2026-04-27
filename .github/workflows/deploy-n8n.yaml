@@ -30,6 +30,7 @@ jobs:
           TLS_KEY: ${{ secrets.TLS_KEY_N8N }}
         run: |
           chmod +x n8n/cert.sh
+          ./n8n/cert.sh
 
       - name: Deploy Components
         run: |

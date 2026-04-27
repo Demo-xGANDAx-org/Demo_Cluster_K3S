@@ -1,8 +1,10 @@
-site_name: Mi Servicio
+site_name: Cluster K3S
 
 nav:
   - Home: index.md
   - Ansible: ansible.md
+  - Monitoring: monitoring.md
+  - Open Claw: openclaw.md
 
 plugins:
   - techdocs-core
